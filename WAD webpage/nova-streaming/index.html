@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NOVA — Enter Another World</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+:root{--bg:#07070B;--primary:#8B5CF6;--secondary:#2563EB;--accent:#EC4899;--text:#FFFFFF;--text2:#A1A1AA;--card:#rgba(255,255,255,0.04);--glass:rgba(255,255,255,0.06);--border:rgba(255,255,255,0.08)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:#07070B;color:#fff;font-family:'Inter',sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+button{cursor:pointer;font-family:inherit}
+a{text-decoration:none;color:inherit}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#8B5CF6;border-radius:4px}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:center;justify-content:space-between;padding:22px 5%;transition:all .4s ease}
+nav.scrolled{background:rgba(7,7,11,.88);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,255,255,.07);padding:14px 5%}
+.nav-logo{display:flex;align-items:center;gap:10px;font-family:'Space Grotesk',sans-serif;font-size:1.55rem;font-weight:800;letter-spacing:3px}
+.nav-logo .logo-text{background:linear-gradient(135deg,#8B5CF6,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-links{display:flex;gap:34px;list-style:none}
+.nav-links a{font-size:.88rem;font-weight:500;color:#A1A1AA;transition:color .3s}
+.nav-links a:hover,.nav-links a.active{color:#fff}
+.nav-right{display:flex;align-items:center;gap:18px}
+.nav-icon{background:none;border:none;color:#A1A1AA;transition:color .3s;padding:4px;line-height:0}
+.nav-icon:hover{color:#fff}
+.nav-icon svg{width:20px;height:20px}
+.avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#8B5CF6,#EC4899);display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:800;cursor:pointer;border:2px solid rgba(139,92,246,.5)}
+.hamburger{display:none;background:none;border:none;color:#fff;flex-direction:column;gap:5px;padding:4px}
+.hamburger span{display:block;width:22px;height:2px;background:#fff;border-radius:2px}
+
+/* ── HERO ── */
+.hero{position:relative;height:100vh;min-height:600px;display:flex;align-items:center;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=1920&q=85') center/cover no-repeat;animation:heroZoom 22s ease-in-out infinite alternate;filter:brightness(.5)}
+@keyframes heroZoom{from{transform:scale(1)}to{transform:scale(1.07)}}
+.hero-grad{position:absolute;inset:0;background:linear-gradient(105deg,rgba(7,7,11,.98) 0%,rgba(7,7,11,.72) 48%,rgba(7,7,11,.15) 80%,transparent 100%)}
+.hero-grad-b{position:absolute;bottom:0;left:0;right:0;height:38%;background:linear-gradient(to top,#07070B,transparent)}
+.particles{position:absolute;inset:0;pointer-events:none}
+.particle{position:absolute;border-radius:50%;animation:floatUp linear infinite}
+@keyframes floatUp{0%{transform:translateY(100vh) scale(0);opacity:0}10%{opacity:.4}90%{opacity:.15}100%{transform:translateY(-30px) scale(1);opacity:0}}
+.hero-content{position:relative;z-index:2;padding:0 5%;max-width:680px;animation:fadeUp .9s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(32px)}to{opacity:1;transform:translateY(0)}}
+.nova-badge{display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,rgba(139,92,246,.2),rgba(236,72,153,.2));border:1px solid rgba(139,92,246,.4);padding:5px 14px;border-radius:20px;font-size:.68rem;font-weight:800;letter-spacing:2px;color:#c084fc;margin-bottom:18px}
+.nova-badge i{width:6px;height:6px;border-radius:50%;background:#8B5CF6;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.hero-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(3rem,6.5vw,5.8rem);font-weight:800;line-height:1;letter-spacing:-1px;margin-bottom:16px;text-shadow:0 0 80px rgba(139,92,246,.3)}
+.hero-tag{font-size:clamp(1rem,1.5vw,1.15rem);color:#cbd5e1;font-style:italic;font-weight:300;margin-bottom:22px;line-height:1.6}
+.hero-meta{display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-size:.8rem;color:#A1A1AA;margin-bottom:32px}
+.hero-meta .dot{width:3px;height:3px;border-radius:50%;background:#A1A1AA}
+.badge-r{background:rgba(236,72,153,.18);border:1px solid rgba(236,72,153,.4);color:#f9a8d4;padding:2px 8px;border-radius:4px;font-weight:700}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap}
+.btn-play{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,#8B5CF6,#6D28D9);border:none;color:#fff;padding:14px 30px;border-radius:12px;font-size:.95rem;font-weight:700;transition:all .3s;box-shadow:0 0 36px rgba(139,92,246,.45);position:relative;overflow:hidden}
+.btn-play::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.15),transparent);opacity:0;transition:opacity .3s}
+.btn-play:hover{transform:translateY(-3px);box-shadow:0 0 56px rgba(139,92,246,.65)}
+.btn-play:hover::before{opacity:1}
+.btn-list{display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);color:#fff;padding:14px 26px;border-radius:12px;font-size:.95rem;font-weight:600;backdrop-filter:blur(10px);transition:all .3s}
+.btn-list:hover{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.35);transform:translateY(-3px)}
+.btn-icon{width:18px;height:18px;flex-shrink:0}
+
+/* ── SECTION SHARED ── */
+.sec{padding:70px 5%}
+.sec-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:28px}
+.sec-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.15rem,2.2vw,1.55rem);font-weight:700}
+.sec-title .hl{background:linear-gradient(135deg,#8B5CF6,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.see-all{font-size:.8rem;color:#8B5CF6;font-weight:500;transition:color .3s}
+.see-all:hover{color:#EC4899}
+
+/* ── SCROLL ROW ── */
+.row{display:flex;gap:16px;overflow-x:auto;padding-bottom:10px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;cursor:grab}
+.row:active{cursor:grabbing}
+.row::-webkit-scrollbar{height:3px}
+
+/* ── CONTINUE WATCHING ── */
+.cw-card{flex:0 0 280px;border-radius:14px;overflow:hidden;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);scroll-snap-align:start;cursor:pointer;transition:transform .3s}
+.cw-card:hover{transform:scale(1.03)}
+.cw-thumb{position:relative;height:158px;overflow:hidden}
+.cw-thumb img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.cw-card:hover .cw-thumb img{transform:scale(1.08)}
+.play-ov{position:absolute;inset:0;background:rgba(0,0,0,.48);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .3s}
+.cw-card:hover .play-ov{opacity:1}
+.play-c{width:48px;height:48px;border-radius:50%;background:rgba(139,92,246,.85);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.prog{height:3px;background:rgba(255,255,255,.1)}
+.prog-fill{height:100%;background:linear-gradient(90deg,#8B5CF6,#EC4899);border-radius:2px}
+.cw-info{padding:12px 14px 14px}
+.cw-title{font-size:.87rem;font-weight:600;margin-bottom:4px}
+.cw-sub{font-size:.75rem;color:#A1A1AA}
+
+/* ── MOOD ── */
+.mood-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.mood-card{position:relative;border-radius:16px;overflow:hidden;height:130px;cursor:pointer;transition:transform .3s}
+.mood-card:hover{transform:scale(1.04)}
+.mood-card img{width:100%;height:100%;object-fit:cover;filter:brightness(.5);transition:filter .3s}
+.mood-card:hover img{filter:brightness(.35)}
+.mood-ov{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+.mood-em{font-size:1.9rem}
+.mood-lbl{font-size:.76rem;font-weight:700;text-align:center;letter-spacing:.5px;text-shadow:0 1px 8px rgba(0,0,0,.9)}
+
+/* ── FEATURED WORLD ── */
+.fw{position:relative;height:80vh;min-height:500px;display:flex;align-items:center;overflow:hidden}
+.fw-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?w=1800&q=85') center/cover no-repeat;filter:brightness(.38) saturate(1.3)}
+.fw-gr{position:absolute;inset:0;background:linear-gradient(90deg,rgba(7,7,11,.98) 0%,rgba(7,7,11,.68) 55%,rgba(7,7,11,.15) 100%)}
+.fw-content{position:relative;z-index:2;padding:0 5%;max-width:580px}
+.fw-label{font-size:.68rem;font-weight:800;letter-spacing:3px;color:#8B5CF6;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.fw-label::before{content:'';width:24px;height:1px;background:#8B5CF6}
+.fw-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(2.6rem,5.5vw,4.8rem);font-weight:800;line-height:1;margin-bottom:16px;background:linear-gradient(135deg,#fff 40%,#c084fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.fw-desc{font-size:1rem;color:#94a3b8;line-height:1.7;margin-bottom:18px}
+.fw-meta{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:28px}
+.fw-tag{background:rgba(139,92,246,.14);border:1px solid rgba(139,92,246,.3);padding:4px 12px;border-radius:20px;font-size:.74rem;color:#c084fc;font-weight:500}
+.btn-enter{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,#8B5CF6,#EC4899);border:none;color:#fff;padding:15px 34px;border-radius:12px;font-size:.95rem;font-weight:700;transition:all .3s;box-shadow:0 0 40px rgba(139,92,246,.4);letter-spacing:.5px}
+.btn-enter:hover{transform:translateY(-3px);box-shadow:0 0 64px rgba(139,92,246,.65)}
+
+/* ── TRENDING ── */
+.tr-card{flex:0 0 190px;position:relative;scroll-snap-align:start;cursor:pointer}
+.tr-num{position:absolute;bottom:-6px;left:-14px;z-index:1;font-family:'Space Grotesk',sans-serif;font-size:5.5rem;font-weight:900;line-height:1;color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.14);letter-spacing:-4px;user-select:none;transition:-webkit-text-stroke-color .3s}
+.tr-card:hover .tr-num{-webkit-text-stroke-color:rgba(139,92,246,.45)}
+.tr-poster{width:100%;aspect-ratio:2/3;border-radius:14px;overflow:hidden;position:relative;margin-left:20px;border:1px solid rgba(255,255,255,.07);transition:transform .3s;box-shadow:0 8px 32px rgba(0,0,0,.5)}
+.tr-card:hover .tr-poster{transform:scale(1.04) translateY(-5px)}
+.tr-poster img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.tr-card:hover .tr-poster img{transform:scale(1.06)}
+.tr-info{position:absolute;inset:0;border-radius:14px;background:linear-gradient(to top,rgba(7,7,11,.95) 0%,transparent 55%);display:flex;flex-direction:column;justify-content:flex-end;padding:14px;opacity:0;transition:opacity .3s}
+.tr-card:hover .tr-info{opacity:1}
+.tr-title{font-size:.83rem;font-weight:700;margin-bottom:3px}
+.tr-sub{font-size:.7rem;color:#A1A1AA}
+
+/* ── ORIGINALS ── */
+.orig-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.orig-card{position:relative;border-radius:16px;overflow:hidden;aspect-ratio:3/4;cursor:pointer;border:1px solid rgba(255,255,255,.07);transition:all .35s}
+.orig-card:hover{transform:translateY(-7px);box-shadow:0 0 50px rgba(139,92,246,.28),0 24px 64px rgba(0,0,0,.55);border-color:rgba(139,92,246,.5)}
+.orig-card img{width:100%;height:100%;object-fit:cover;filter:brightness(.72);transition:all .4s}
+.orig-card:hover img{filter:brightness(.55);transform:scale(1.04)}
+.orig-badge{position:absolute;top:12px;left:12px;background:linear-gradient(135deg,rgba(139,92,246,.92),rgba(236,72,153,.92));padding:4px 10px;border-radius:6px;font-size:.6rem;font-weight:800;letter-spacing:1.5px}
+.orig-info{position:absolute;bottom:0;left:0;right:0;padding:50px 16px 18px;background:linear-gradient(to top,rgba(7,7,11,.98),transparent)}
+.orig-title{font-family:'Space Grotesk',sans-serif;font-size:1.05rem;font-weight:800;letter-spacing:1px}
+.orig-sub{font-size:.7rem;color:#A1A1AA;margin-top:4px}
+
+/* ── STORIES ── */
+.story-card{flex:0 0 220px;border-radius:14px;overflow:hidden;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);scroll-snap-align:start;cursor:pointer;transition:transform .3s}
+.story-card:hover{transform:scale(1.03)}
+.story-thumb{height:130px;overflow:hidden}
+.story-thumb img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.story-card:hover .story-thumb img{transform:scale(1.07)}
+.story-prog{height:3px;background:rgba(255,255,255,.1)}
+.story-prog div{height:100%;background:linear-gradient(90deg,#2563EB,#8B5CF6)}
+.story-info{padding:12px 14px 14px}
+.s-name{font-size:.87rem;font-weight:700;margin-bottom:4px}
+.s-ep{font-size:.7rem;color:#8B5CF6;font-weight:600;margin-bottom:3px}
+.s-title{font-size:.74rem;color:#A1A1AA}
+
+/* ── DISCOVERY ── */
+.disc{text-align:center;padding:90px 5%;position:relative;overflow:hidden}
+.disc::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(139,92,246,.07) 0%,transparent 70%);pointer-events:none}
+.disc-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(2rem,4vw,3.6rem);font-weight:800;margin-bottom:10px}
+.disc-sub{font-size:1.05rem;color:#A1A1AA;margin-bottom:50px}
+.choices{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-bottom:40px}
+.choice{border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#fff;padding:20px 32px;border-radius:16px;font-size:.82rem;font-weight:700;letter-spacing:1.5px;transition:all .3s;backdrop-filter:blur(10px);min-width:190px}
+.choice:hover{background:rgba(139,92,246,.14);border-color:rgba(139,92,246,.5);transform:scale(1.07);box-shadow:0 0 32px rgba(139,92,246,.25);color:#c084fc}
+.btn-surprise{background:linear-gradient(135deg,#8B5CF6,#EC4899);border:none;color:#fff;padding:16px 48px;border-radius:50px;font-size:1rem;font-weight:700;letter-spacing:1px;transition:all .3s;box-shadow:0 0 44px rgba(139,92,246,.38)}
+.btn-surprise:hover{transform:scale(1.07);box-shadow:0 0 70px rgba(139,92,246,.6)}
+
+/* ── MY UNIVERSE ── */
+.univ-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.univ-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:22px;backdrop-filter:blur(16px);transition:all .3s;cursor:pointer;display:flex;flex-direction:column;gap:14px}
+.univ-card:hover{background:rgba(139,92,246,.08);border-color:rgba(139,92,246,.3);transform:translateY(-5px);box-shadow:0 0 34px rgba(139,92,246,.15)}
+.univ-icon{width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,rgba(139,92,246,.28),rgba(236,72,153,.28));border:1px solid rgba(139,92,246,.3);display:flex;align-items:center;justify-content:center}
+.univ-icon svg{width:20px;height:20px;color:#c084fc}
+.univ-lbl{font-size:.88rem;font-weight:600}
+.univ-cnt{font-size:.74rem;color:#A1A1AA;margin-top:3px}
+
+/* ── FINAL CTA ── */
+.cta{position:relative;text-align:center;padding:130px 5%;overflow:hidden}
+.cta-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=1800&q=80') center/cover no-repeat;filter:brightness(.14) saturate(.6)}
+.cta-ov{position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(139,92,246,.16) 0%,rgba(7,7,11,.85) 70%)}
+.cta-inner{position:relative;z-index:2}
+.cta-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(2.2rem,5vw,4.6rem);font-weight:800;line-height:1.1;margin-bottom:16px}
+.cta-sub{font-size:1.1rem;color:#A1A1AA;margin-bottom:46px}
+.btn-cta{position:relative;display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,#8B5CF6,#EC4899);border:none;color:#fff;padding:18px 50px;border-radius:50px;font-size:1.05rem;font-weight:700;transition:all .3s}
+.btn-cta::before{content:'';position:absolute;inset:-4px;border-radius:54px;background:linear-gradient(135deg,#8B5CF6,#EC4899);filter:blur(18px);opacity:.45;animation:glowPulse 2.5s ease infinite;z-index:-1}
+@keyframes glowPulse{0%,100%{opacity:.35}50%{opacity:.75}}
+.btn-cta:hover{transform:scale(1.06)}
+
+/* ── FOOTER ── */
+footer{border-top:1px solid rgba(255,255,255,.07);padding:52px 5% 28px}
+.ft-top{display:flex;justify-content:space-between;align-items:flex-start;gap:40px;flex-wrap:wrap;margin-bottom:40px}
+.ft-brand{max-width:280px}
+.ft-logo{display:flex;align-items:center;gap:10px;font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:800;letter-spacing:2.5px;margin-bottom:12px}
+.ft-logo .logo-text{background:linear-gradient(135deg,#8B5CF6,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.ft-tag{font-size:.8rem;color:#A1A1AA;line-height:1.65}
+.ft-links{display:flex;gap:56px;flex-wrap:wrap}
+.ft-col h4{font-size:.72rem;font-weight:700;letter-spacing:1.8px;color:#A1A1AA;text-transform:uppercase;margin-bottom:14px}
+.ft-col ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+.ft-col ul li a{font-size:.8rem;color:#A1A1AA;transition:color .3s}
+.ft-col ul li a:hover{color:#fff}
+.ft-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;padding-top:24px;border-top:1px solid rgba(255,255,255,.07)}
+.ft-copy{font-size:.76rem;color:#52525b}
+.socials{display:flex;gap:12px}
+.soc{width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;transition:all .3s;color:#A1A1AA}
+.soc:hover{background:rgba(139,92,246,.14);border-color:rgba(139,92,246,.4);color:#c084fc}
+.soc svg{width:15px;height:15px}
+
+/* ── ORIGINALS HEADER ── */
+.orig-sec{padding:70px 5%;background:linear-gradient(180deg,rgba(139,92,246,.04) 0%,transparent 100%)}
+
+/* ── FADE UP ── */
+.fu{opacity:0;transform:translateY(38px);transition:opacity .7s ease,transform .7s ease}
+.fu.vis{opacity:1;transform:translateY(0)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1024px){.orig-grid{grid-template-columns:repeat(2,1fr)}.univ-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:768px){.nav-links{display:none}.hamburger{display:flex}.mood-grid{grid-template-columns:repeat(2,1fr)}.fw{height:60vh}.fw-title{font-size:2.5rem}.orig-grid{grid-template-columns:repeat(2,1fr)}.univ-grid{grid-template-columns:repeat(2,1fr)}.choices{flex-direction:column;align-items:center}.hero-content{max-width:100%}.sec{padding:50px 4%}}
+@media(max-width:480px){nav{padding:14px 4%}.hero-title{font-size:2.4rem}.mood-grid{grid-template-columns:repeat(2,1fr)}.orig-grid{grid-template-columns:repeat(2,1fr)}.univ-grid{grid-template-columns:1fr 1fr}.cta-title{font-size:2rem}.ft-top{flex-direction:column}.ft-links{gap:24px}}
+</style>
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<nav id="nav">
+  <div class="nav-logo">
+    <svg width="34" height="34" viewBox="0 0 36 36" fill="none">
+      <circle cx="18" cy="18" r="15.5" stroke="url(#ng1)" stroke-width="1.4"/>
+      <circle cx="18" cy="18" r="5" fill="url(#ng2)"/>
+      <ellipse cx="18" cy="18" rx="15.5" ry="5.8" stroke="url(#ng1)" stroke-width="1" stroke-dasharray="3 2.5" transform="rotate(-32 18 18)"/>
+      <circle cx="10" cy="9" r="2" fill="#8B5CF6"/>
+      <circle cx="26" cy="27" r="1.5" fill="#EC4899"/>
+      <circle cx="28.5" cy="11" r="1" fill="#2563EB"/>
+      <defs>
+        <linearGradient id="ng1" x1="2" y1="2" x2="34" y2="34" gradientUnits="userSpaceOnUse"><stop stop-color="#8B5CF6"/><stop offset="1" stop-color="#EC4899"/></linearGradient>
+        <linearGradient id="ng2" x1="13" y1="13" x2="23" y2="23" gradientUnits="userSpaceOnUse"><stop stop-color="#8B5CF6"/><stop offset="1" stop-color="#2563EB"/></linearGradient>
+      </defs>
+    </svg>
+    <span class="logo-text">NOVA</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#" class="active">Home</a></li>
+    <li><a href="#discover">Discover</a></li>
+    <li><a href="#worlds">Worlds</a></li>
+    <li><a href="#mylist">My List</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="nav-icon" aria-label="Search">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    </button>
+    <button class="nav-icon" aria-label="Notifications">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+    </button>
+    <div class="avatar" title="Profile">A</div>
+    <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- ══ HERO ══ -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grad"></div>
+  <div class="hero-grad-b"></div>
+  <div class="particles" id="ptcls"></div>
+  <div class="hero-content">
+    <div class="nova-badge"><i></i>NOVA ORIGINAL</div>
+    <h1 class="hero-title">THE LAST<br>SIGNAL</h1>
+    <p class="hero-tag">"Somewhere beyond the silence,<br>someone is still calling."</p>
+    <div class="hero-meta">
+      <span>2026</span><span class="dot"></span>
+      <span class="badge-r">16+</span><span class="dot"></span>
+      <span>2h 18m</span><span class="dot"></span>
+      <span>Sci-Fi · Mystery · Drama</span>
+    </div>
+    <div class="hero-btns">
+      <button class="btn-play">
+        <svg class="btn-icon" fill="currentColor" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        Watch Now
+      </button>
+      <button class="btn-list">
+        <svg class="btn-icon" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+        Add to My List
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CONTINUE WATCHING ══ -->
+<section class="sec" id="continue">
+  <div class="sec-header fu">
+    <h2 class="sec-title">Continue Your <span class="hl">Journey</span></h2>
+    <a href="#" class="see-all">See all →</a>
+  </div>
+  <div class="row fu">
+    <div class="cw-card">
+      <div class="cw-thumb"><img src="https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=560&q=80" alt="The Last Signal" loading="lazy"><div class="play-ov"><div class="play-c"><svg width="18" height="18" fill="white" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="prog"><div class="prog-fill" style="width:62%"></div></div>
+      <div class="cw-info"><div class="cw-title">The Last Signal</div><div class="cw-sub">S1 · E04 · 38 min left</div></div>
+    </div>
+    <div class="cw-card">
+      <div class="cw-thumb"><img src="https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?w=560&q=80" alt="Neon District" loading="lazy"><div class="play-ov"><div class="play-c"><svg width="18" height="18" fill="white" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="prog"><div class="prog-fill" style="width:25%"></div></div>
+      <div class="cw-info"><div class="cw-title">Neon District</div><div class="cw-sub">S2 · E01 · 52 min left</div></div>
+    </div>
+    <div class="cw-card">
+      <div class="cw-thumb"><img src="https://images.unsplash.com/photo-1464802686167-b939a6910659?w=560&q=80" alt="After Earth" loading="lazy"><div class="play-ov"><div class="play-c"><svg width="18" height="18" fill="white" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="prog"><div class="prog-fill" style="width:80%"></div></div>
+      <div class="cw-info"><div class="cw-title">After Earth</div><div class="cw-sub">Movie · 22 min left</div></div>
+    </div>
+    <div class="cw-card">
+      <div class="cw-thumb"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=560&q=80" alt="The Forgotten City" loading="lazy"><div class="play-ov"><div class="play-c"><svg width="18" height="18" fill="white" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="prog"><div class="prog-fill" style="width:44%"></div></div>
+      <div class="cw-info"><div class="cw-title">The Forgotten City</div><div class="cw-sub">S1 · E06 · 29 min left</div></div>
+    </div>
+    <div class="cw-card">
+      <div class="cw-thumb"><img src="https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=560&q=80" alt="Dark Matter" loading="lazy"><div class="play-ov"><div class="play-c"><svg width="18" height="18" fill="white" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="prog"><div class="prog-fill" style="width:10%"></div></div>
+      <div class="cw-info"><div class="cw-title">Dark Matter</div><div class="cw-sub">S1 · E01 · 57 min left</div></div>
+    </div>
+    <div class="cw-card">
+      <div class="cw-thumb"><img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=560&q=80" alt="Parallel" loading="lazy"><div class="play-ov"><div class="play-c"><svg width="18" height="18" fill="white" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+      <div class="prog"><div class="prog-fill" style="width:90%"></div></div>
+      <div class="cw-info"><div class="cw-title">Parallel</div><div class="cw-sub">S2 · E08 · 6 min left</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ MOOD ══ -->
+<section class="sec" id="discover">
+  <div class="sec-header fu">
+    <h2 class="sec-title">What are you <span class="hl">feeling?</span></h2>
+  </div>
+  <div class="mood-grid fu">
+    <div class="mood-card" style="background:linear-gradient(135deg,#1e1b4b,#312e81)"><img src="https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=400&q=70" alt="" loading="lazy"><div class="mood-ov"><div class="mood-em">🌌</div><div class="mood-lbl">Need an Escape</div></div></div>
+    <div class="mood-card" style="background:linear-gradient(135deg,#4c0519,#831843)"><img src="https://images.unsplash.com/photo-1489533119213-66a5cd877091?w=400&q=70" alt="" loading="lazy"><div class="mood-ov"><div class="mood-em">💔</div><div class="mood-lbl">Want to Feel Something</div></div></div>
+    <div class="mood-card" style="background:linear-gradient(135deg,#1c1917,#7c2d12)"><img src="https://images.unsplash.com/photo-1532274402911-5a369e4c4bb5?w=400&q=70" alt="" loading="lazy"><div class="mood-ov"><div class="mood-em">⚡</div><div class="mood-lbl">Give Me Adrenaline</div></div></div>
+    <div class="mood-card" style="background:linear-gradient(135deg,#14532d,#166534)"><img src="https://images.unsplash.com/photo-1527529482837-4698179dc6ce?w=400&q=70" alt="" loading="lazy"><div class="mood-ov"><div class="mood-em">😂</div><div class="mood-lbl">Make Me Laugh</div></div></div>
+    <div class="mood-card" style="background:linear-gradient(135deg,#0c1445,#1e3a5f)"><img src="https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=400&q=70" alt="" loading="lazy"><div class="mood-ov"><div class="mood-em">🔮</div><div class="mood-lbl">Enter the Unknown</div></div></div>
+    <div class="mood-card" style="background:linear-gradient(135deg,#1a0a2e,#2d1b69)"><img src="https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=400&q=70" alt="" loading="lazy"><div class="mood-ov"><div class="mood-em">🖤</div><div class="mood-lbl">Something Dark</div></div></div>
+    <div class="mood-card" style="background:linear-gradient(135deg,#1e3a5f,#0f4c75)"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=70" alt="" loading="lazy"><div class="mood-ov"><div class="mood-em">☕</div><div class="mood-lbl">Slow Down</div></div></div>
+    <div class="mood-card" style="background:linear-gradient(135deg,#2e1b69,#4c1d95)"><img src="https://images.unsplash.com/photo-1464802686167-b939a6910659?w=400&q=70" alt="" loading="lazy"><div class="mood-ov"><div class="mood-em">✨</div><div class="mood-lbl">Dream Tonight</div></div></div>
+  </div>
+</section>
+
+<!-- ══ FEATURED WORLD ══ -->
+<div class="fw" id="worlds">
+  <div class="fw-bg"></div>
+  <div class="fw-gr"></div>
+  <div class="fw-content fu">
+    <div class="fw-label">Enter the World</div>
+    <h2 class="fw-title">NEON<br>DISTRICT</h2>
+    <p class="fw-desc">2049. The city never sleeps. Everyone has a secret.<br>Someone is about to expose them all.</p>
+    <div class="fw-meta">
+      <span class="fw-tag">⭐ 98% Match</span>
+      <span class="fw-tag">2026</span>
+      <span class="fw-tag">2 Seasons</span>
+      <span class="fw-tag">Cyberpunk · Thriller</span>
+    </div>
+    <button class="btn-enter">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg>
+      Enter World
+    </button>
+  </div>
+</div>
+
+<!-- ══ TRENDING ══ -->
+<section class="sec">
+  <div class="sec-header fu">
+    <h2 class="sec-title">Everyone Is <span class="hl">Watching</span></h2>
+    <a href="#" class="see-all">View all →</a>
+  </div>
+  <div class="row fu" style="padding-left:22px;padding-bottom:20px">
+    <div class="tr-card"><div class="tr-num">01</div><div class="tr-poster"><img src="https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=300&h=450&fit=crop&q=80" alt="The Last Signal" loading="lazy"><div class="tr-info"><div class="tr-title">The Last Signal</div><div class="tr-sub">Sci-Fi · 2026</div></div></div></div>
+    <div class="tr-card"><div class="tr-num">02</div><div class="tr-poster"><img src="https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?w=300&h=450&fit=crop&q=80" alt="Neon District" loading="lazy"><div class="tr-info"><div class="tr-title">Neon District</div><div class="tr-sub">Cyberpunk · 2026</div></div></div></div>
+    <div class="tr-card"><div class="tr-num">03</div><div class="tr-poster"><img src="https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=300&h=450&fit=crop&q=80" alt="Zero Hour" loading="lazy"><div class="tr-info"><div class="tr-title">Zero Hour</div><div class="tr-sub">Thriller · 2025</div></div></div></div>
+    <div class="tr-card"><div class="tr-num">04</div><div class="tr-poster"><img src="https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=300&h=450&fit=crop&q=80" alt="The Silent House" loading="lazy"><div class="tr-info"><div class="tr-title">The Silent House</div><div class="tr-sub">Horror · 2025</div></div></div></div>
+    <div class="tr-card"><div class="tr-num">05</div><div class="tr-poster"><img src="https://images.unsplash.com/photo-1464802686167-b939a6910659?w=300&h=450&fit=crop&q=80" alt="Orbit" loading="lazy"><div class="tr-info"><div class="tr-title">Orbit</div><div class="tr-sub">Sci-Fi · 2026</div></div></div></div>
+    <div class="tr-card"><div class="tr-num">06</div><div class="tr-poster"><img src="https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=300&h=450&fit=crop&q=80" alt="Black Ocean" loading="lazy"><div class="tr-info"><div class="tr-title">Black Ocean</div><div class="tr-sub">Drama · 2025</div></div></div></div>
+    <div class="tr-card"><div class="tr-num">07</div><div class="tr-poster"><img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=300&h=450&fit=crop&q=80" alt="The Algorithm" loading="lazy"><div class="tr-info"><div class="tr-title">The Algorithm</div><div class="tr-sub">Thriller · 2026</div></div></div></div>
+    <div class="tr-card"><div class="tr-num">08</div><div class="tr-poster"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300&h=450&fit=crop&q=80" alt="Afterlight" loading="lazy"><div class="tr-info"><div class="tr-title">Afterlight</div><div class="tr-sub">Mystery · 2025</div></div></div></div>
+  </div>
+</section>
+
+<!-- ══ NOVA ORIGINALS ══ -->
+<section class="orig-sec">
+  <div class="sec-header fu">
+    <h2 class="sec-title" style="display:flex;align-items:center;gap:12px">
+      <span style="background:linear-gradient(135deg,#8B5CF6,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:1.3em;letter-spacing:2px">NOVA</span>
+      ORIGINALS
+    </h2>
+  </div>
+  <div class="orig-grid fu">
+    <div class="orig-card">
+      <img src="https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=500&h=700&fit=crop&q=80" alt="Echo" loading="lazy">
+      <div class="orig-badge">NOVA ORIGINAL</div>
+      <div class="orig-info"><div class="orig-title">ECHO</div><div class="orig-sub">Sci-Fi · Season 1</div></div>
+    </div>
+    <div class="orig-card">
+      <img src="https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=500&h=700&fit=crop&q=80" alt="The Last Signal" loading="lazy">
+      <div class="orig-badge">NOVA ORIGINAL</div>
+      <div class="orig-info"><div class="orig-title">THE LAST SIGNAL</div><div class="orig-sub">Drama · Film</div></div>
+    </div>
+    <div class="orig-card">
+      <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500&h=700&fit=crop&q=80" alt="Afterlight" loading="lazy">
+      <div class="orig-badge">NOVA ORIGINAL</div>
+      <div class="orig-info"><div class="orig-title">AFTERLIGHT</div><div class="orig-sub">Mystery · Season 1</div></div>
+    </div>
+    <div class="orig-card">
+      <img src="https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=500&h=700&fit=crop&q=80" alt="Void" loading="lazy">
+      <div class="orig-badge">NOVA ORIGINAL</div>
+      <div class="orig-info"><div class="orig-title">VOID</div><div class="orig-sub">Horror · Film</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ STORIES ══ -->
+<section class="sec">
+  <div class="sec-header fu">
+    <h2 class="sec-title">Stories Worth <span class="hl">Staying For</span></h2>
+    <a href="#" class="see-all">Browse all →</a>
+  </div>
+  <div class="row fu">
+    <div class="story-card"><div class="story-thumb"><img src="https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?w=400&q=80" alt="Parallel" loading="lazy"></div><div class="story-prog"><div style="width:55%"></div></div><div class="story-info"><div class="s-name">Parallel</div><div class="s-ep">Season 02 · Episode 04</div><div class="s-title">"The Choice"</div></div></div>
+    <div class="story-card"><div class="story-thumb"><img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=400&q=80" alt="The Algorithm" loading="lazy"></div><div class="story-prog"><div style="width:20%"></div></div><div class="story-info"><div class="s-name">The Algorithm</div><div class="s-ep">Season 01 · Episode 02</div><div class="s-title">"Root Access"</div></div></div>
+    <div class="story-card"><div class="story-thumb"><img src="https://images.unsplash.com/photo-1532274402911-5a369e4c4bb5?w=400&q=80" alt="Neon District" loading="lazy"></div><div class="story-prog"><div style="width:70%"></div></div><div class="story-info"><div class="s-name">Neon District</div><div class="s-ep">Season 02 · Episode 07</div><div class="s-title">"Neon Rain"</div></div></div>
+    <div class="story-card"><div class="story-thumb"><img src="https://images.unsplash.com/photo-1489533119213-66a5cd877091?w=400&q=80" alt="Dark Matters" loading="lazy"></div><div class="story-prog"><div style="width:42%"></div></div><div class="story-info"><div class="s-name">Dark Matters</div><div class="s-ep">Season 01 · Episode 05</div><div class="s-title">"The Split"</div></div></div>
+    <div class="story-card"><div class="story-thumb"><img src="https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=400&q=80" alt="Zero Hour" loading="lazy"></div><div class="story-prog"><div style="width:85%"></div></div><div class="story-info"><div class="s-name">Zero Hour</div><div class="s-ep">Season 03 · Episode 10</div><div class="s-title">"Countdown"</div></div></div>
+    <div class="story-card"><div class="story-thumb"><img src="https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=400&q=80" alt="Echo" loading="lazy"></div><div class="story-prog"><div style="width:15%"></div></div><div class="story-info"><div class="s-name">Echo</div><div class="s-ep">Season 01 · Episode 01</div><div class="s-title">"Awakening"</div></div></div>
+  </div>
+</section>
+
+<!-- ══ DISCOVERY ══ -->
+<section class="disc" id="interactive">
+  <p style="font-size:.68rem;font-weight:800;letter-spacing:3px;color:#8B5CF6;text-transform:uppercase;margin-bottom:12px;position:relative;z-index:2">Don't know what to watch?</p>
+  <h2 class="disc-title fu">Give us <span style="background:linear-gradient(135deg,#8B5CF6,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent">10 seconds.</span></h2>
+  <p class="disc-sub fu">Tell us how you feel. We'll handle the rest.</p>
+  <div class="choices fu">
+    <button class="choice">🎭 I WANT TO FEEL</button>
+    <button class="choice">🚀 I WANT TO ESCAPE</button>
+    <button class="choice">🎲 I WANT TO BE SURPRISED</button>
+  </div>
+  <button class="btn-surprise fu">✦ Surprise Me</button>
+</section>
+
+<!-- ══ MY UNIVERSE ══ -->
+<section class="sec" id="mylist">
+  <div class="sec-header fu">
+    <h2 class="sec-title">Your <span class="hl">Universe</span></h2>
+  </div>
+  <div class="univ-grid fu">
+    <div class="univ-card">
+      <div class="univ-icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+      <div><div class="univ-lbl">Continue Watching</div><div class="univ-cnt">6 titles in progress</div></div>
+    </div>
+    <div class="univ-card">
+      <div class="univ-icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></div>
+      <div><div class="univ-lbl">My List</div><div class="univ-cnt">23 saved titles</div></div>
+    </div>
+    <div class="univ-card">
+      <div class="univ-icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+      <div><div class="univ-lbl">Recently Watched</div><div class="univ-cnt">14 titles this week</div></div>
+    </div>
+    <div class="univ-card">
+      <div class="univ-icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div><div class="univ-lbl">Because You Watched…</div><div class="univ-cnt">Neon District</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FINAL CTA ══ -->
+<div class="cta">
+  <div class="cta-bg"></div>
+  <div class="cta-ov"></div>
+  <div class="cta-inner fu">
+    <h2 class="cta-title">There are worlds<br>you've never seen.</h2>
+    <p class="cta-sub">Your next story is waiting.</p>
+    <button class="btn-cta">
+      <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      Start Exploring
+    </button>
+  </div>
+</div>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="ft-top">
+    <div class="ft-brand">
+      <div class="ft-logo">
+        <svg width="26" height="26" viewBox="0 0 36 36" fill="none">
+          <circle cx="18" cy="18" r="15.5" stroke="url(#fg1)" stroke-width="1.4"/>
+          <circle cx="18" cy="18" r="5" fill="url(#fg2)"/>
+          <ellipse cx="18" cy="18" rx="15.5" ry="5.8" stroke="url(#fg1)" stroke-width="1" stroke-dasharray="3 2.5" transform="rotate(-32 18 18)"/>
+          <defs>
+            <linearGradient id="fg1" x1="2" y1="2" x2="34" y2="34" gradientUnits="userSpaceOnUse"><stop stop-color="#8B5CF6"/><stop offset="1" stop-color="#EC4899"/></linearGradient>
+            <linearGradient id="fg2" x1="13" y1="13" x2="23" y2="23" gradientUnits="userSpaceOnUse"><stop stop-color="#8B5CF6"/><stop offset="1" stop-color="#2563EB"/></linearGradient>
+          </defs>
+        </svg>
+        <span class="logo-text">NOVA</span>
+      </div>
+      <p class="ft-tag">Entertainment beyond the screen.<br>Step into the worlds that wait for you.</p>
+    </div>
+    <div class="ft-links">
+      <div class="ft-col">
+        <h4>Navigate</h4>
+        <ul><li><a href="#">Home</a></li><li><a href="#">Discover</a></li><li><a href="#">Worlds</a></li><li><a href="#">Originals</a></li></ul>
+      </div>
+      <div class="ft-col">
+        <h4>Company</h4>
+        <ul><li><a href="#">About</a></li><li><a href="#">Careers</a></li><li><a href="#">Press</a></li><li><a href="#">Contact</a></li></ul>
+      </div>
+      <div class="ft-col">
+        <h4>Support</h4>
+        <ul><li><a href="#">Help</a></li><li><a href="#">Privacy</a></li><li><a href="#">Terms</a></li><li><a href="#">Cookies</a></li></ul>
+      </div>
+    </div>
+  </div>
+  <div class="ft-bottom">
+    <span class="ft-copy">© 2026 NOVA Entertainment. All rights reserved.</span>
+    <div class="socials">
+      <a href="#" class="soc" aria-label="Instagram"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+      <a href="#" class="soc" aria-label="X / Twitter"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a href="#" class="soc" aria-label="YouTube"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor" stroke="none"/></svg></a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Nav scroll
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 50));
+
+// Particles
+const pc = document.getElementById('ptcls');
+const colors = ['#8B5CF6','#2563EB','#EC4899','#a78bfa'];
+for(let i=0;i<20;i++){
+  const p=document.createElement('div');
+  p.className='particle';
+  const s=Math.random()*3+1;
+  p.style.cssText=`width:${s}px;height:${s}px;left:${Math.random()*100}%;animation-duration:${Math.random()*14+8}s;animation-delay:${Math.random()*12}s;background:${colors[i%4]};`;
+  pc.appendChild(p);
+}
+
+// Fade up on scroll
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting){e.target.classList.add('vis');obs.unobserve(e.target);} });
+},{threshold:.1});
+document.querySelectorAll('.fu').forEach(el=>obs.observe(el));
+
+// Drag scroll
+document.querySelectorAll('.row').forEach(r=>{
+  let down=false,sx,sl;
+  r.addEventListener('mousedown',e=>{down=true;sx=e.pageX-r.offsetLeft;sl=r.scrollLeft;});
+  r.addEventListener('mouseleave',()=>down=false);
+  r.addEventListener('mouseup',()=>down=false);
+  r.addEventListener('mousemove',e=>{if(!down)return;e.preventDefault();r.scrollLeft=sl-(e.pageX-r.offsetLeft-sx)*1.5;});
+});
+</script>
+</body>
+</html>
